@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'user_name', 'phone_number', 'password', 'bio',
     ];
 
     /**
@@ -34,6 +34,35 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'phone_number_verified_at' => 'datetime',
     ];
+	
+	public function messags()
+    {
+        return $this->hasMany('App\Message');
+    }
+	public function groups()
+    {
+        return $this->belongsToMany('App\Group', 'group_members', 'group_id', 'member_id');
+    }
+	
+	public function groupAdmins()
+    {
+        return $this->belongsToMany('App\Group', 'group_admins', 'group_id', 'admin_id');
+    }
+	
+	public function channels()
+    {
+        return $this->belongsToMany('App\Channel', 'channel_members', 'channel_id', 'member_id');
+    }
+	
+	public function channelAdmins()
+    {
+        return $this->belongsToMany('App\Channel', 'channel_admins', 'channel_id', 'admin_id');
+    }
+	
+	public function recievedMessages()
+    {
+        return $this->belongsToMany('App\Message', 'user_messages', 'message_id', 'user_id');
+    }
 }
